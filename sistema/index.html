@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>EMPA Vision — sistema completo · UCEN</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --blue: #1B3C8C;
+    --blue-deep: #142E6B;
+    --blue-mid: #4763A8;
+    --ink: #101319;
+    --cool: #EDF1F7;
+    --midgray: #6E7787;
+    --alert: #D64545;
+    --softblue: #8B9CC9;
+    --ok: #2E7D4F;
+    --amber: #B87A1E;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #FFFFFF;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  section { padding: 30px 22px 34px; }
+
+  .sec-kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .sec-title {
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  p.lead { font-size: 15.5px; line-height: 1.6; color: #272C36; margin-bottom: 12px; }
+
+  /* ---------- Cabecera ---------- */
+  header { background: var(--blue); color: #FFFFFF; }
+  header .wrap { padding: 34px 22px 30px; }
+  .kicker {
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-size: 46px;
+    font-weight: 800;
+    letter-spacing: -1.8px;
+    line-height: 1;
+  }
+  header .subtitle {
+    font-size: 16.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.92);
+    margin-top: 12px;
+    max-width: 540px;
+  }
+  .head-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+  }
+  .autores { font-size: 14px; font-weight: 700; }
+  .head-meta { font-size: 12px; color: rgba(255,255,255,0.78); line-height: 1.5; margin-top: 4px; }
+  .head-row img { height: 84px; flex: 0 0 auto; display: block; }
+
+  /* ---------- Flujo ---------- */
+  .mirada { background: var(--cool); }
+  .flow { display: flex; flex-direction: column; }
+  .paso {
+    background: #FFFFFF;
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px 15px;
+    align-items: flex-start;
+  }
+  .paso .icono {
+    flex: 0 0 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+  }
+  .paso .txt h3 { font-size: 15px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; line-height: 1.3; }
+  .paso .txt p { font-size: 13.5px; line-height: 1.5; color: #272C36; margin-top: 3px; }
+  .paso .txt .chip {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--blue);
+    margin-top: 7px;
+  }
+  .paso.destacado { background: var(--blue-deep); }
+  .paso.destacado .txt h3 { color: #FFFFFF; }
+  .paso.destacado .txt p { color: rgba(255,255,255,0.88); }
+  .paso.destacado .txt .chip { color: #A9C3F5; }
+  .flecha { text-align: center; font-size: 22px; font-weight: 800; color: var(--blue); line-height: 1; padding: 7px 0; }
+  .sello {
+    background: var(--blue);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 14px 20px;
+    margin-top: 18px;
+  }
+  .sello .big { font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+  .sello .lbl { font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.4; max-width: 300px; }
+
+  /* ---------- Problemática ---------- */
+  .problema .giant .num {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -2.5px;
+    color: var(--alert);
+    line-height: 0.95;
+  }
+  .problema .giant .lbl { font-size: 14.5px; font-weight: 700; line-height: 1.45; margin: 8px 0 16px; }
+  .mini-callouts { display: flex; gap: 10px; margin-top: 16px; }
+  .mini { flex: 1; background: var(--cool); padding: 10px 12px 9px; }
+  .mini .num { font-size: 19px; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; }
+  .mini .lbl { font-size: 9.5px; font-weight: 600; color: var(--midgray); line-height: 1.35; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+  /* ---------- Fundamentación ---------- */
+  .fund { background: var(--cool); }
+  .cards { display: flex; flex-direction: column; gap: 12px; }
+  .card { background: #FFFFFF; padding: 15px 16px 16px; border-top: 4px solid var(--blue); }
+  .card h3 { font-size: 14.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.3px; margin-bottom: 5px; line-height: 1.3; }
+  .card p { font-size: 13.5px; line-height: 1.55; color: #272C36; }
+
+  /* ---------- Metodología: sub-sistemas ---------- */
+  .subs { display: flex; flex-direction: column; gap: 12px; }
+  .sub {
+    background: var(--cool);
+    padding: 15px 16px 16px;
+    border-left: 5px solid var(--blue);
+  }
+  .sub .etiqueta {
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    color: var(--midgray);
+    margin-bottom: 3px;
+  }
+  .sub h3 { font-size: 16px; font-weight: 800; letter-spacing: -0.2px; margin-bottom: 5px; line-height: 1.3; }
+  .sub p { font-size: 13.5px; line-height: 1.55; color: #272C36; }
+  .sub .dato {
+    font-size: 11px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--blue);
+    margin-top: 8px;
+    line-height: 1.45;
+  }
+  .terreno {
+    background: var(--blue-deep);
+    color: #FFFFFF;
+    padding: 15px 16px 16px;
+    margin-top: 14px;
+  }
+  .terreno h3 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: #A9C3F5; margin-bottom: 6px; }
+  .terreno p { font-size: 13.5px; line-height: 1.55; color: rgba(255,255,255,0.9); }
+
+  /* ---------- Inteligencia preventiva ---------- */
+  .intel .viz { margin-top: 18px; }
+  .intel .v-cap {
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    margin-bottom: 8px;
+  }
+  .intel svg { display: block; width: 100%; height: auto; }
+  .leyenda { font-size: 11px; color: var(--midgray); margin-top: 14px; line-height: 1.5; }
+
+  /* ---------- Resultados ---------- */
+  .resultados { background: var(--blue-deep); color: #FFFFFF; }
+  .resultados .sec-kicker { color: #A9C3F5; }
+  .resultados .sec-title { color: #FFFFFF; }
+  .res-hero { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .res-hero .num { font-size: 66px; font-weight: 800; letter-spacing: -2.5px; line-height: 0.95; }
+  .res-hero .lbl { font-size: 15px; font-weight: 700; line-height: 1.4; max-width: 300px; }
+  .barra-tiempo { margin: 20px 0 4px; }
+  .bt-fila { display: flex; align-items: center; gap: 10px; margin-bottom: 9px; }
+  .bt-fila .t { flex: 0 0 92px; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.4px; color: rgba(255,255,255,0.8); line-height: 1.3; }
+  .bt-fila .barra { height: 22px; }
+  .bt-fila .v { font-size: 12.5px; font-weight: 800; white-space: nowrap; }
+  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+  .res-box { background: rgba(255,255,255,0.08); padding: 13px 14px 14px; }
+  .res-box .num { font-size: 28px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+  .res-box .lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.82); margin-top: 6px; line-height: 1.4; }
+  .fase2 { background: #FFFFFF; color: var(--ink); padding: 15px 16px 16px; margin-top: 20px; }
+  .fase2 h3 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--blue); margin-bottom: 6px; }
+  .fase2 p { font-size: 13.5px; line-height: 1.55; color: #272C36; }
+
+  /* ---------- Conclusiones ---------- */
+  .conclusiones ol { list-style: none; counter-reset: c; display: flex; flex-direction: column; gap: 14px; }
+  .conclusiones li { counter-increment: c; display: flex; gap: 14px; align-items: flex-start; }
+  .conclusiones li::before {
+    content: counter(c);
+    flex: 0 0 34px;
+    height: 34px;
+    background: var(--blue);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .conclusiones li p { font-size: 14px; line-height: 1.55; color: #272C36; padding-top: 4px; }
+  .conclusiones li p b { color: var(--ink); }
+
+  /* ---------- Cierre ---------- */
+  .cierre { background: var(--blue); color: #FFFFFF; text-align: center; }
+  .cierre .statement { font-size: 17px; font-weight: 800; line-height: 1.5; max-width: 520px; margin: 0 auto; }
+  .cierre .demo {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #FFFFFF;
+    border: 2px solid rgba(255,255,255,0.55);
+    padding: 9px 16px;
+    text-decoration: none;
+  }
+  footer {
+    background: var(--blue-deep);
+    color: rgba(255,255,255,0.75);
+    font-size: 11.5px;
+    line-height: 1.6;
+    text-align: center;
+    padding: 18px 22px 22px;
+  }
+  footer a { color: rgba(255,255,255,0.9); }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">Proyecto Fondo Cataliza UCEN 2026</div>
+    <h1>EMPA Vision</h1>
+    <div class="subtitle">Del papel a la decisión sanitaria: digitalización inteligente del Examen de Medicina Preventiva del Adulto — extraer, cargar y entender los datos que hoy mueren archivados.</div>
+    <div class="head-row">
+      <div>
+        <div class="autores">Benjamín López</div>
+        <div class="head-meta">Ingeniería Civil en Computación e Informática<br>Universidad Central de Chile · Región de Coquimbo</div>
+      </div>
+      <img src="../assets/logo-ucen-blanco.png" alt="Universidad Central de Chile">
+    </div>
+  </div>
+</header>
+
+<!-- El sistema de una mirada -->
+<section class="mirada">
+  <div class="wrap">
+    <div class="sec-kicker">El sistema de una mirada</div>
+    <div class="sec-title">Un solo flujo: del papel a la decisión</div>
+
+    <div class="flow">
+      <div class="paso">
+        <div class="icono" style="background:#8B9CC9">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="3" width="18" height="24" rx="1.5"/>
+            <line x1="2" y1="15" x2="28" y2="15" stroke-width="3"/>
+            <line x1="10" y1="8" x2="20" y2="8"/><line x1="10" y1="22" x2="20" y2="22"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Escaneo</h3>
+          <p>El personal escanea los EMPA en papel, individual o por lotes, sin cambiar su rutina de trabajo.</p>
+          <span class="chip">Por lotes: el preferido de los equipos clínicos</span>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso">
+        <div class="icono" style="background:#4763A8">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round">
+            <rect x="8" y="8" width="14" height="14" rx="2"/>
+            <line x1="12" y1="8" x2="12" y2="3"/><line x1="18" y1="8" x2="18" y2="3"/>
+            <line x1="12" y1="27" x2="12" y2="22"/><line x1="18" y1="27" x2="18" y2="22"/>
+            <line x1="8" y1="12" x2="3" y2="12"/><line x1="8" y1="18" x2="3" y2="18"/>
+            <line x1="27" y1="12" x2="22" y2="12"/><line x1="27" y1="18" x2="22" y2="18"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Extracción con IA</h3>
+          <p>Un pipeline de visión computacional estructura los datos según su significado clínico, con un nivel de confianza por cada campo — no es OCR a secas: es comprensión del formulario.</p>
+          <span class="chip">58,1 segundos por formulario</span>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso">
+        <div class="icono" style="background:#B87A1E">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="15" cy="10" r="5"/>
+            <path d="M5 27 C5 20 25 20 25 27"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Validación humana</h3>
+          <p>Los casos dudosos pasan por revisión con el recorte del manuscrito a la vista; el dato personal (RUT) lo digita siempre una persona.</p>
+          <span class="chip" style="color:var(--amber)">La persona decide · la IA propone</span>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso">
+        <div class="icono" style="background:var(--blue)">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="9" width="20" height="14" rx="2"/>
+            <circle cx="11" cy="16" r="1.6" fill="#FFFFFF"/><circle cx="19" cy="16" r="1.6" fill="#FFFFFF"/>
+            <line x1="15" y1="9" x2="15" y2="4"/><circle cx="15" cy="3.5" r="1.4" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Carga automática al sistema clínico</h3>
+          <p>Un bot multi-agente ingresa los datos validados a la ficha clínica (RAYEN), verifica cada campo y deriva a revisión lo que no le calza.</p>
+          <span class="chip">16/17 campos autónomos · 0 escrituras erradas</span>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso destacado">
+        <div class="icono" style="background:#0E2350">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round">
+            <line x1="6" y1="25" x2="6" y2="15"/>
+            <line x1="13" y1="25" x2="13" y2="8"/>
+            <line x1="20" y1="25" x2="20" y2="12"/>
+            <line x1="27" y1="25" x2="27" y2="4"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Inteligencia preventiva</h3>
+          <p>Los datos agregados alimentan dashboards de medicina preventiva por establecimiento, comuna y grupo etario — la parte del examen que hoy no existe.</p>
+          <span class="chip">De datos archivados a decisiones sanitarias</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sello">
+      <div class="big">94&nbsp;%</div>
+      <div class="lbl">del flujo corre sin intervención humana</div>
+    </div>
+  </div>
+</section>
+
+<!-- Problemática -->
+<section class="problema">
+  <div class="wrap">
+    <div class="sec-kicker" style="color:var(--alert)">Problemática</div>
+    <div class="sec-title">La prevención muere en la transcripción</div>
+    <div class="giant">
+      <div class="num">274.000</div>
+      <div class="lbl">horas al año se van en digitar formularios a mano en el sistema público de salud chileno.</div>
+    </div>
+    <p class="lead">Chile realiza cerca de 1,6 millones de EMPA al año — la herramienta diseñada para detectar a tiempo hipertensión, diabetes y riesgo cardiovascular. Cada uno nace en papel y se transcribe a mano al sistema clínico, unos 5 minutos por formulario: errores de tipeo, información que llega tarde y datos que quedan archivados sin explotar, justo donde el personal sanitario es más escaso.</p>
+    <div class="mini-callouts">
+      <div class="mini"><div class="num">1,6 M</div><div class="lbl">EMPA al año en Chile</div></div>
+      <div class="mini"><div class="num">$1.700 M</div><div class="lbl">CLP al año en transcripción</div></div>
+      <div class="mini"><div class="num">3,7 vs 9,2</div><div class="lbl">enfermeras por 1.000 hab., Chile vs OCDE</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Fundamentación -->
+<section class="fund">
+  <div class="wrap">
+    <div class="sec-kicker">Fundamentación</div>
+    <div class="sec-title">Digitalizar no basta: hay que cerrar el circuito</div>
+    <div class="cards">
+      <div class="card">
+        <h3>El dato tiene que llegar al flujo real de atención</h3>
+        <p>Convertir papel en archivos no cambia nada si alguien debe volver a digitarlos. El sistema integra la extracción, la validación y la carga al sistema clínico en un solo flujo: el dato viaja del formulario a la ficha sin pasar por un teclado.</p>
+      </div>
+      <div class="card">
+        <h3>Comprensión clínica, no OCR a secas</h3>
+        <p>Un EMPA mezcla casillas, cifras manuscritas y campos críticos. El pipeline organiza la información según su significado clínico y declara cuánta confianza tiene en cada campo, para que la revisión humana se concentre solo donde hace falta.</p>
+      </div>
+      <div class="card">
+        <h3>El valor final está en la mirada poblacional</h3>
+        <p>Cada EMPA digitalizado alimenta una base que permite estratificar riesgo, focalizar intervenciones por comuna y proyectar la evolución de una cohorte — el propósito preventivo del examen, hoy imposible con papel archivado.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Metodología -->
+<section class="metodo">
+  <div class="wrap">
+    <div class="sec-kicker">Metodología</div>
+    <div class="sec-title">Tres sub-sistemas, un contrato de datos común</div>
+    <div class="subs">
+      <div class="sub">
+        <div class="etiqueta">Sub-sistema 1 · Digitalización</div>
+        <h3>Extracción inteligente de formularios</h3>
+        <p>Modelos de visión computacional de última generación sobre un catálogo propio de campos del EMPA: segmentación por zonas, reconocimiento de manuscrito y postproceso clínico, con confianza por campo y detección de casos dudosos.</p>
+        <div class="dato">Validado en terreno con 492 formularios</div>
+      </div>
+      <div class="sub">
+        <div class="etiqueta">Sub-sistema 2 · Carga automática</div>
+        <h3>Bot multi-agente con humano en el circuito</h3>
+        <p>Cinco agentes coordinados (percepción, planificación, navegación, validación y escalamiento) cargan los datos a la ficha clínica y aprenden de cada confirmación humana mediante refuerzo interactivo. Sin LLM externo: la inteligencia es propia y auditable.</p>
+        <div class="dato">101 tests automatizados · demo pública 24/7</div>
+      </div>
+      <div class="sub">
+        <div class="etiqueta">Sub-sistema 3 · Análisis</div>
+        <h3>Dashboards de medicina preventiva</h3>
+        <p>Métricas por establecimiento, factores de riesgo frecuentes por zona y estratificación cardiovascular de la población evaluada, construidas sobre los datos ya digitalizados y anonimizados.</p>
+        <div class="dato">Análisis poblacional y proyección de cohortes</div>
+      </div>
+    </div>
+    <div class="terreno">
+      <h3>Validación en terreno</h3>
+      <p>Piloto 2025 en el Hospital San Pablo de Coquimbo y el Consultorio Emilio Schaffhauser de La Serena: 492 EMPA digitalizados, 92 de casos operativos reales, con retroalimentación directa de los equipos clínicos.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Inteligencia preventiva con datos reales -->
+<section class="intel">
+  <div class="wrap">
+    <div class="sec-kicker">Inteligencia preventiva — datos reales</div>
+    <div class="sec-title">De datos archivados a decisiones sanitarias</div>
+    <p class="lead">Análisis real de 217 EMPA (18–25 años) de La Serena y Coquimbo, de uso académico aprobado por el comité de ética institucional: hoy toda la cohorte tiene riesgo cardiovascular bajo, pero la proyección a 25 años muestra dónde — y cuándo — hay que intervenir.</p>
+
+    <div class="viz">
+      <div class="v-cap">Riesgo cardiovascular de la cohorte, proyectado</div>
+      <svg viewBox="0 0 392 190">
+        <line x1="12" y1="152" x2="384" y2="152" stroke="#C9D2E0" stroke-width="2"/>
+        <path d="M44 134 L148 125 L252 98 L356 30 L356 152 L44 152 Z" fill="#1B3C8C" opacity="0.08"/>
+        <path d="M44 134 L148 125 L252 98 L356 30" fill="none" stroke="#1B3C8C" stroke-width="4"/>
+        <circle cx="44" cy="134" r="6" fill="#1B3C8C"/>
+        <circle cx="148" cy="125" r="6" fill="#1B3C8C"/>
+        <circle cx="252" cy="98" r="6" fill="#1B3C8C"/>
+        <circle cx="356" cy="30" r="7.5" fill="#D64545"/>
+        <g font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="17" font-weight="800" fill="#101319" text-anchor="middle">
+          <text x="44" y="118">1,8 %</text>
+          <text x="148" y="108">2,7 %</text>
+          <text x="252" y="81">5,5 %</text>
+          <text x="356" y="16" fill="#D64545">12,5 %</text>
+        </g>
+        <g font-family="'Helvetica Neue', Helvetica, Arial, sans-serif" font-size="13" font-weight="600" fill="#6E7787" text-anchor="middle">
+          <text x="44" y="172">Hoy (~21)</text>
+          <text x="148" y="172">+5 años</text>
+          <text x="252" y="172">+15 años</text>
+          <text x="356" y="172">+25 (~46)</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="viz">
+      <div class="v-cap">Categoría de riesgo a +25 años</div>
+      <svg viewBox="0 0 392 168">
+        <g font-family="'Helvetica Neue', Helvetica, Arial, sans-serif">
+          <text x="0" y="24" font-size="15" font-weight="600" fill="#101319">Bajo</text>
+          <rect x="96" y="8" width="160" height="24" fill="#1B3C8C"/>
+          <text x="266" y="26" font-size="16" font-weight="800" fill="#1B3C8C">55,3 %</text>
+          <text x="0" y="66" font-size="15" font-weight="600" fill="#101319">Intermedio</text>
+          <rect x="96" y="50" width="75" height="24" fill="#8B9CC9"/>
+          <text x="181" y="68" font-size="16" font-weight="800" fill="#6E7787">25,8 %</text>
+          <text x="0" y="108" font-size="15" font-weight="600" fill="#101319">Alto</text>
+          <rect x="96" y="92" width="55" height="24" fill="#D64545"/>
+          <text x="161" y="110" font-size="16" font-weight="800" fill="#D64545">18,9 %</text>
+          <line x1="0" y1="130" x2="384" y2="130" stroke="#C9D2E0" stroke-width="1.5"/>
+          <text x="0" y="147" font-size="13" font-weight="600" fill="#6E7787">Hoy: 100 % riesgo bajo. Sin intervención,</text>
+          <text x="0" y="164" font-size="13.5" font-weight="800" fill="#D64545">44,7 % sube de categoría a 25 años.</text>
+        </g>
+      </svg>
+    </div>
+
+    <div class="leyenda">Datos reales del análisis de cohorte · proyección a 25 años con modelo Framingham, bajo supuesto de hábitos constantes.</div>
+  </div>
+</section>
+
+<!-- Resultados -->
+<section class="resultados">
+  <div class="wrap">
+    <div class="sec-kicker">Resultados</div>
+    <div class="sec-title">Evidencia en terreno, en dos generaciones del sistema</div>
+
+    <div class="res-hero">
+      <div class="num">5×</div>
+      <div class="lbl">más rápido que la transcripción manual, medido sobre 492 formularios del piloto</div>
+    </div>
+
+    <div class="barra-tiempo">
+      <div class="bt-fila">
+        <div class="t">Manual</div>
+        <div class="barra" style="flex: 1; background: rgba(255,255,255,0.25)"></div>
+        <div class="v">5 min</div>
+      </div>
+      <div class="bt-fila">
+        <div class="t">EMPA Vision</div>
+        <div class="barra" style="flex: 0.194; background: #4CAF7D"></div>
+        <div class="v">58,1 s · −80,6 %</div>
+      </div>
+    </div>
+
+    <div class="res-grid">
+      <div class="res-box"><div class="num">492</div><div class="lbl">formularios digitalizados en el piloto — 92 de casos operativos reales</div></div>
+      <div class="res-box"><div class="num">~4 min</div><div class="lbl">ahorrados por formulario: de 12 a 62 EMPA procesables por hora</div></div>
+      <div class="res-box"><div class="num">16/17</div><div class="lbl">campos cargados de forma autónoma a la ficha clínica (94 %)</div></div>
+      <div class="res-box"><div class="num">0</div><div class="lbl">escrituras erradas en todos los ensayos de carga automática</div></div>
+    </div>
+
+    <div class="fase2">
+      <h3>Del piloto a la plataforma 2026</h3>
+      <p>El piloto validó la digitalización en terreno; la generación 2026 completó el circuito con la carga automática al sistema clínico y el aprendizaje por refuerzo interactivo: el sistema mejora con cada confirmación de la operadora, sin reentrenamiento offline. Los equipos clínicos prefirieron el escaneo por lotes y valoraron la estratificación automática de riesgo.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Conclusiones -->
+<section class="conclusiones">
+  <div class="wrap">
+    <div class="sec-kicker">Conclusiones</div>
+    <div class="sec-title">Lo que el sistema demuestra</div>
+    <ol>
+      <li><p><b>El circuito completo es viable hoy:</b> escaneo, comprensión clínica, validación humana y carga automática funcionan integrados, con el 94&nbsp;% del flujo sin intervención y cero escrituras erradas.</p></li>
+      <li><p><b>El ahorro es medible y significativo:</b> 5 veces más rápido que la transcripción manual — a escala nacional, 274.000 horas anuales que vuelven a la atención de pacientes.</p></li>
+      <li><p><b>La privacidad y la seguridad son diseño, no promesa:</b> el dato personal lo maneja siempre una persona, la duda se escala en vez de adivinarse, y la inteligencia del sistema es propia y auditable.</p></li>
+      <li><p><b>El papel archivado se convierte en prevención:</b> los mismos datos que hoy duermen en bodegas permiten estratificar riesgo y anticipar dónde intervenir — el propósito original del EMPA, por fin cumplido.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- Cierre -->
+<section class="cierre">
+  <div class="wrap">
+    <div class="statement">Escalado a nivel nacional, EMPA Vision devolvería 274.000 horas anuales a la atención directa y convertiría 1,6 millones de exámenes archivados en inteligencia preventiva para cada centro de salud.</div>
+    <a class="demo" href="https://empabot.threnody.me">Demo en vivo — empabot.threnody.me</a>
+  </div>
+</section>
+
+<footer>
+  Benjamín López · Sistemas Inteligentes 2026-1 · Ingeniería Civil en Computación e Informática<br>
+  Universidad Central de Chile, Facultad de Ingeniería y Arquitectura — Región de Coquimbo<br>
+  Proyecto Fondo Cataliza UCEN 2026 · <a href="../index.html">Ver infografía de empa-bot, el agente de carga</a>
+</footer>
+
+</body>
+</html>

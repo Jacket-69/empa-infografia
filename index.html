@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>empa-bot — Sistemas Inteligentes · UCEN</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --blue: #1B3C8C;
+    --blue-deep: #142E6B;
+    --blue-mid: #4763A8;
+    --ink: #101319;
+    --cool: #EDF1F7;
+    --midgray: #6E7787;
+    --alert: #D64545;
+    --softblue: #8B9CC9;
+    --ok: #2E7D4F;
+    --amber: #B87A1E;
+  }
+  html { -webkit-text-size-adjust: 100%; }
+  body {
+    background: #FFFFFF;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    color: var(--ink);
+    line-height: 1.5;
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  section { padding: 30px 22px 34px; }
+
+  .sec-kicker {
+    font-size: 12px;
+    font-weight: 800;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--blue);
+    margin-bottom: 6px;
+  }
+  .sec-title {
+    font-size: 23px;
+    font-weight: 800;
+    letter-spacing: -0.3px;
+    line-height: 1.2;
+    margin-bottom: 14px;
+  }
+  p.lead { font-size: 15.5px; line-height: 1.6; color: #272C36; margin-bottom: 12px; }
+  p.nota { font-size: 13px; line-height: 1.55; color: var(--midgray); }
+
+  /* ---------- Cabecera ---------- */
+  header {
+    background: var(--blue);
+    color: #FFFFFF;
+  }
+  header .wrap { padding: 34px 22px 30px; }
+  .kicker {
+    font-size: 11.5px;
+    font-weight: 800;
+    letter-spacing: 1.8px;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.85);
+    margin-bottom: 10px;
+  }
+  header h1 {
+    font-size: 54px;
+    font-weight: 800;
+    letter-spacing: -2px;
+    line-height: 1;
+  }
+  header .subtitle {
+    font-size: 16.5px;
+    font-weight: 500;
+    line-height: 1.5;
+    color: rgba(255,255,255,0.92);
+    margin-top: 12px;
+    max-width: 540px;
+  }
+  .head-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.25);
+  }
+  .autores { font-size: 14px; font-weight: 700; }
+  .head-meta { font-size: 12px; color: rgba(255,255,255,0.78); line-height: 1.5; margin-top: 4px; }
+  .head-row img { height: 84px; flex: 0 0 auto; display: block; }
+
+  /* ---------- Sistema de una mirada (flujo) ---------- */
+  .mirada { background: var(--cool); }
+  .flow { display: flex; flex-direction: column; }
+  .paso {
+    background: #FFFFFF;
+    display: flex;
+    gap: 14px;
+    padding: 14px 16px 15px;
+    align-items: flex-start;
+  }
+  .paso .icono {
+    flex: 0 0 46px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #FFFFFF;
+  }
+  .paso .txt h3 {
+    font-size: 15px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    line-height: 1.3;
+  }
+  .paso .txt p { font-size: 13.5px; line-height: 1.5; color: #272C36; margin-top: 3px; }
+  .paso .txt .chip {
+    display: inline-block;
+    font-size: 10.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    color: var(--blue);
+    margin-top: 7px;
+  }
+  .paso.bot { background: var(--blue-deep); }
+  .paso.bot .txt h3 { color: #FFFFFF; }
+  .paso.bot .txt p { color: rgba(255,255,255,0.88); }
+  .paso.bot .txt .chip { color: #A9C3F5; }
+  .flecha {
+    text-align: center;
+    font-size: 22px;
+    font-weight: 800;
+    color: var(--blue);
+    line-height: 1;
+    padding: 7px 0;
+  }
+  .sello {
+    background: var(--blue);
+    color: #FFFFFF;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 16px;
+    padding: 14px 20px;
+    margin-top: 18px;
+  }
+  .sello .big { font-size: 38px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+  .sello .lbl { font-size: 13.5px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.6px; line-height: 1.4; max-width: 300px; }
+
+  /* ---------- Problemática ---------- */
+  .problema .giant .num {
+    font-size: 64px;
+    font-weight: 800;
+    letter-spacing: -2.5px;
+    color: var(--alert);
+    line-height: 0.95;
+  }
+  .problema .giant .lbl {
+    font-size: 14.5px;
+    font-weight: 700;
+    line-height: 1.45;
+    margin: 8px 0 16px;
+  }
+  .mini-callouts { display: flex; gap: 10px; margin-top: 16px; }
+  .mini { flex: 1; background: var(--cool); padding: 10px 12px 9px; }
+  .mini .num { font-size: 19px; font-weight: 800; color: var(--blue); letter-spacing: -0.5px; }
+  .mini .lbl { font-size: 9.5px; font-weight: 600; color: var(--midgray); line-height: 1.35; margin-top: 4px; text-transform: uppercase; letter-spacing: 0.4px; }
+
+  /* ---------- Fundamentación ---------- */
+  .fund { background: var(--cool); }
+  .cards { display: flex; flex-direction: column; gap: 12px; }
+  .card { background: #FFFFFF; padding: 15px 16px 16px; border-top: 4px solid var(--blue); }
+  .card h3 {
+    font-size: 14.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+    margin-bottom: 5px;
+    line-height: 1.3;
+  }
+  .card p { font-size: 13.5px; line-height: 1.55; color: #272C36; }
+  .pra {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    flex-wrap: wrap;
+    background: var(--blue-deep);
+    color: #FFFFFF;
+    padding: 13px 14px;
+    margin-top: 14px;
+    font-size: 13px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+  }
+  .pra span.arrow { color: #A9C3F5; }
+
+  /* ---------- Metodología ---------- */
+  .agentes { display: flex; flex-direction: column; margin-top: 4px; }
+  .agente {
+    display: flex;
+    gap: 14px;
+    padding: 12px 14px 13px;
+    background: var(--cool);
+    align-items: flex-start;
+  }
+  .agente + .agente { margin-top: 8px; }
+  .agente .rol {
+    flex: 0 0 108px;
+    font-size: 12px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--blue);
+    line-height: 1.35;
+    padding-top: 1px;
+  }
+  .agente .que { font-size: 13px; line-height: 1.5; color: #272C36; }
+  .barreras { display: flex; gap: 8px; margin-top: 14px; }
+  .barrera { flex: 1; background: var(--blue); color: #FFFFFF; padding: 10px 10px 11px; }
+  .barrera .n { font-size: 20px; font-weight: 800; line-height: 1; }
+  .barrera .t { font-size: 11px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; margin-top: 5px; line-height: 1.3; }
+  .barrera .d { font-size: 10.5px; line-height: 1.4; color: rgba(255,255,255,0.85); margin-top: 3px; }
+  .loop {
+    background: var(--cool);
+    padding: 14px 16px 15px;
+    margin-top: 14px;
+  }
+  .loop h3 { font-size: 14px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.4px; margin-bottom: 6px; }
+  .loop p { font-size: 13.5px; line-height: 1.55; color: #272C36; }
+  .loop .estados {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 7px;
+    flex-wrap: wrap;
+    margin-top: 10px;
+    font-size: 11.5px;
+    font-weight: 800;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    color: var(--blue);
+  }
+  .rigor { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 14px; }
+  .rig { text-align: center; background: #FFFFFF; border: 1.5px solid #C9D2E0; padding: 10px 6px 9px; }
+  .rig .num { font-size: 22px; font-weight: 800; color: var(--ink); letter-spacing: -0.5px; }
+  .rig .lbl { font-size: 9px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--midgray); margin-top: 3px; line-height: 1.3; }
+
+  /* ---------- Resultados ---------- */
+  .resultados { background: var(--blue-deep); color: #FFFFFF; }
+  .resultados .sec-kicker { color: #A9C3F5; }
+  .resultados .sec-title { color: #FFFFFF; }
+  .res-hero { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; }
+  .res-hero .num { font-size: 78px; font-weight: 800; letter-spacing: -3px; line-height: 0.95; }
+  .res-hero .lbl { font-size: 15px; font-weight: 700; line-height: 1.4; max-width: 300px; }
+  .campos { display: flex; gap: 4px; margin: 18px 0 6px; }
+  .campo { flex: 1; height: 26px; background: #4CAF7D; }
+  .campo.esc { background: var(--amber); }
+  .campos-ley { display: flex; justify-content: space-between; font-size: 11px; color: rgba(255,255,255,0.8); line-height: 1.4; gap: 12px; }
+  .res-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 22px; }
+  .res-box { background: rgba(255,255,255,0.08); padding: 13px 14px 14px; }
+  .res-box .num { font-size: 30px; font-weight: 800; letter-spacing: -1px; line-height: 1; }
+  .res-box .lbl { font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: rgba(255,255,255,0.82); margin-top: 6px; line-height: 1.4; }
+  .aprend {
+    background: #FFFFFF;
+    color: var(--ink);
+    padding: 15px 16px 16px;
+    margin-top: 22px;
+  }
+  .aprend h3 { font-size: 13px; font-weight: 800; text-transform: uppercase; letter-spacing: 0.5px; color: var(--blue); margin-bottom: 8px; }
+  .aprend .antes-despues {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 14px;
+    margin-bottom: 8px;
+  }
+  .aprend .ad { text-align: center; }
+  .aprend .ad .v { font-size: 30px; font-weight: 800; letter-spacing: -1px; }
+  .aprend .ad .t { font-size: 10px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.5px; color: var(--midgray); margin-top: 2px; }
+  .aprend .ad.a .v { color: var(--amber); }
+  .aprend .ad.d .v { color: var(--ok); }
+  .aprend .fl { font-size: 24px; font-weight: 800; color: var(--blue); }
+  .aprend p { font-size: 12.5px; line-height: 1.5; color: #272C36; }
+
+  /* ---------- Conclusiones ---------- */
+  .conclusiones ol { list-style: none; counter-reset: c; display: flex; flex-direction: column; gap: 14px; }
+  .conclusiones li {
+    counter-increment: c;
+    display: flex;
+    gap: 14px;
+    align-items: flex-start;
+  }
+  .conclusiones li::before {
+    content: counter(c);
+    flex: 0 0 34px;
+    height: 34px;
+    background: var(--blue);
+    color: #FFFFFF;
+    font-size: 17px;
+    font-weight: 800;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .conclusiones li p { font-size: 14px; line-height: 1.55; color: #272C36; padding-top: 4px; }
+  .conclusiones li p b { color: var(--ink); }
+
+  /* ---------- Cierre ---------- */
+  .cierre {
+    background: var(--blue);
+    color: #FFFFFF;
+    text-align: center;
+  }
+  .cierre .statement {
+    font-size: 17px;
+    font-weight: 800;
+    line-height: 1.5;
+    max-width: 520px;
+    margin: 0 auto;
+  }
+  .cierre .demo {
+    display: inline-block;
+    margin-top: 16px;
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.4px;
+    color: #FFFFFF;
+    border: 2px solid rgba(255,255,255,0.55);
+    padding: 9px 16px;
+    text-decoration: none;
+  }
+  footer {
+    background: var(--blue-deep);
+    color: rgba(255,255,255,0.75);
+    font-size: 11.5px;
+    line-height: 1.6;
+    text-align: center;
+    padding: 18px 22px 22px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <div class="kicker">Presentación final · Sistemas Inteligentes · 2026-1</div>
+    <h1>empa&#8209;bot</h1>
+    <div class="subtitle">El agente que lleva el examen preventivo digitalizado hasta la ficha clínica — con inteligencia propia, revisión humana integrada y cero cajas negras.</div>
+    <div class="head-row">
+      <div>
+        <div class="autores">Benjamín López</div>
+        <div class="head-meta">Ingeniería Civil en Computación e Informática<br>Universidad Central de Chile · Región de Coquimbo</div>
+      </div>
+      <img src="assets/logo-ucen-blanco.png" alt="Universidad Central de Chile">
+    </div>
+  </div>
+</header>
+
+<!-- El sistema de una mirada -->
+<section class="mirada">
+  <div class="wrap">
+    <div class="sec-kicker">El sistema de una mirada</div>
+    <div class="sec-title">Del papel a la ficha clínica, sin transcribir a mano</div>
+
+    <div class="flow">
+      <div class="paso">
+        <div class="icono" style="background:#8B9CC9">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="6" y="3" width="18" height="24" rx="1.5"/>
+            <line x1="10" y1="9" x2="20" y2="9"/><line x1="10" y1="14" x2="20" y2="14"/><line x1="10" y1="19" x2="16" y2="19"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>EMPA en papel</h3>
+          <p>El Examen de Medicina Preventiva del Adulto se llena a mano en el centro de salud, como siempre.</p>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso">
+        <div class="icono" style="background:#4763A8">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round">
+            <rect x="8" y="8" width="14" height="14" rx="2"/>
+            <line x1="12" y1="8" x2="12" y2="3"/><line x1="18" y1="8" x2="18" y2="3"/>
+            <line x1="12" y1="27" x2="12" y2="22"/><line x1="18" y1="27" x2="18" y2="22"/>
+            <line x1="8" y1="12" x2="3" y2="12"/><line x1="8" y1="18" x2="3" y2="18"/>
+            <line x1="27" y1="12" x2="22" y2="12"/><line x1="27" y1="18" x2="22" y2="18"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Digitalización con IA <span style="color:var(--midgray); font-weight:600">(empa&#8209;vision)</span></h3>
+          <p>El formulario escaneado se convierte en datos estructurados, con un nivel de confianza por cada campo extraído.</p>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso">
+        <div class="icono" style="background:#B87A1E">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="15" cy="10" r="5"/>
+            <path d="M5 27 C5 20 25 20 25 27"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Revisión humana</h3>
+          <p>La técnico en enfermería (TENS) ve el recorte real del manuscrito junto a cada dato dudoso, corrige lo que haga falta y digita el RUT — el dato sensible que la IA nunca toca.</p>
+          <span class="chip" style="color:var(--amber)">La persona decide · la IA propone</span>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso bot">
+        <div class="icono" style="background:#0E2350">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="5" y="9" width="20" height="14" rx="2"/>
+            <circle cx="11" cy="16" r="1.6" fill="#FFFFFF"/><circle cx="19" cy="16" r="1.6" fill="#FFFFFF"/>
+            <line x1="15" y1="9" x2="15" y2="4"/><circle cx="15" cy="3.5" r="1.4" fill="#FFFFFF"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>empa&#8209;bot · este proyecto</h3>
+          <p>Un sistema multi-agente lee el formulario clínico de destino, planifica qué dato va en qué casillero, lo carga, verifica que quedó guardado y deriva a revisión lo que no le calza.</p>
+          <span class="chip">Percepción → razonamiento → acción</span>
+        </div>
+      </div>
+
+      <div class="flecha">↓</div>
+
+      <div class="paso">
+        <div class="icono" style="background:var(--blue)">
+          <svg width="26" height="26" viewBox="0 0 30 30" fill="none" stroke="#FFFFFF" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="5" width="22" height="20" rx="2"/>
+            <path d="M9 15 L13 19 L21 10"/>
+          </svg>
+        </div>
+        <div class="txt">
+          <h3>Ficha clínica (RAYEN)</h3>
+          <p>Los datos quedan registrados en el sistema clínico con acuse de recibo, listos para la atención y la prevención.</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="sello">
+      <div class="big">94&nbsp;%</div>
+      <div class="lbl">del flujo corre sin intervención humana</div>
+    </div>
+  </div>
+</section>
+
+<!-- Problemática -->
+<section class="problema">
+  <div class="wrap">
+    <div class="sec-kicker" style="color:var(--alert)">Problemática</div>
+    <div class="sec-title">La prevención muere en la transcripción</div>
+    <div class="giant">
+      <div class="num">274.000</div>
+      <div class="lbl">horas al año se van en digitar formularios a mano en el sistema público de salud chileno.</div>
+    </div>
+    <p class="lead">Chile realiza cerca de 1,6 millones de EMPA al año y cada uno nace en papel. Digitalizarlo resuelve la mitad del problema: alguien tiene que transcribir esos datos, campo por campo, al sistema clínico — unos 5 minutos por formulario, con errores de tipeo y datos que llegan tarde a quien los necesita.</p>
+    <p class="lead"><b>empa-bot cierra ese último tramo:</b> toma el EMPA ya digitalizado y validado, y lo ingresa él mismo a la ficha clínica.</p>
+    <div class="mini-callouts">
+      <div class="mini"><div class="num">1,6 M</div><div class="lbl">EMPA al año en Chile</div></div>
+      <div class="mini"><div class="num">$1.700 M</div><div class="lbl">CLP al año en transcripción</div></div>
+      <div class="mini"><div class="num">3,7 vs 9,2</div><div class="lbl">enfermeras por 1.000 hab., Chile vs OCDE</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Fundamentación -->
+<section class="fund">
+  <div class="wrap">
+    <div class="sec-kicker">Fundamentación</div>
+    <div class="sec-title">Por qué un agente, y por qué sin LLM externo</div>
+    <div class="cards">
+      <div class="card">
+        <h3>Un formulario clínico no se rellena a ciegas</h3>
+        <p>Un script rígido se rompe con cualquier cambio de pantalla y escribe donde no debe. Cargar datos clínicos exige percibir el formulario real, razonar qué dato corresponde a qué casillero y verificar que cada valor quedó persistido. Eso es un agente, no una macro.</p>
+      </div>
+      <div class="card">
+        <h3>Datos de salud: la inteligencia se construye, no se arrienda</h3>
+        <p>El sistema no envía datos clínicos a APIs externas. Su razonamiento corre sobre un codificador semántico local y reglas calibradas empíricamente: auditable de punta a punta, sin costo por consulta y sin datos de pacientes saliendo del sistema.</p>
+      </div>
+      <div class="card">
+        <h3>La duda no es un error: es parte del diseño</h3>
+        <p>Cuando el agente no está seguro, no adivina — escala el caso a una persona con el contexto a la vista. Y cada confirmación humana entra a la memoria del sistema: la próxima vez ya no necesita preguntar.</p>
+      </div>
+    </div>
+    <div class="pra">Percepción <span class="arrow">→</span> Razonamiento <span class="arrow">→</span> Acción <span class="arrow">·</span> con humano en el circuito</div>
+  </div>
+</section>
+
+<!-- Metodología -->
+<section class="metodo">
+  <div class="wrap">
+    <div class="sec-kicker">Metodología</div>
+    <div class="sec-title">Cinco agentes coordinados, cada uno con un trabajo</div>
+
+    <div class="agentes">
+      <div class="agente"><div class="rol">Perceptor</div><div class="que">Lee el formulario de destino tal como está: qué casilleros existen, de qué tipo son y qué contienen.</div></div>
+      <div class="agente"><div class="rol">Planificador</div><div class="que">Decide qué dato del EMPA va en qué casillero, pasando cada mapeo por tres barreras de seguridad.</div></div>
+      <div class="agente"><div class="rol">Navegador</div><div class="que">Ejecuta el plan sobre el navegador real (Playwright), acción por acción, sobre un entorno equivalente a RAYEN.</div></div>
+      <div class="agente"><div class="rol">Validador</div><div class="que">Relee cada campo después de escribirlo y confirma que el valor quedó efectivamente guardado.</div></div>
+      <div class="agente"><div class="rol">Escalador</div><div class="que">Junta todo lo dudoso o fallido en una cola de revisión humana, con registro auditable de cada sesión.</div></div>
+    </div>
+
+    <div class="barreras">
+      <div class="barrera"><div class="n">1</div><div class="t">Tipo</div><div class="d">el dato y el casillero deben ser estructuralmente compatibles</div></div>
+      <div class="barrera"><div class="n">2</div><div class="t">Semántica</div><div class="d">codificador local mide si significan lo mismo — umbral calibrado con ensayos</div></div>
+      <div class="barrera"><div class="n">3</div><div class="t">Colisión</div><div class="d">un casillero, un solo dato: nunca dos valores al mismo lugar</div></div>
+    </div>
+
+    <div class="loop">
+      <h3>Aprendizaje por refuerzo interactivo</h3>
+      <p>Cada vez que una persona confirma un mapeo dudoso, esa decisión entra al diccionario del sistema y el caso deja de escalar para siempre. El sistema mejora usándose: la política de carga se actualiza con cada interacción, sin reentrenar nada offline.</p>
+      <div class="estados">Estado <span>·</span> Acción <span>·</span> Recompensa <span>·</span> Política</div>
+    </div>
+
+    <div class="rigor">
+      <div class="rig"><div class="num">26</div><div class="lbl">pull requests integrados</div></div>
+      <div class="rig"><div class="num">101</div><div class="lbl">tests automatizados</div></div>
+      <div class="rig"><div class="num">4</div><div class="lbl">decisiones de arquitectura documentadas</div></div>
+      <div class="rig"><div class="num">~2 min</div><div class="lbl">integración continua por cambio</div></div>
+    </div>
+  </div>
+</section>
+
+<!-- Resultados -->
+<section class="resultados">
+  <div class="wrap">
+    <div class="sec-kicker">Resultados</div>
+    <div class="sec-title">Medidos de punta a punta, sobre el flujo real</div>
+
+    <div class="res-hero">
+      <div class="num">16/17</div>
+      <div class="lbl">campos cargados correctamente en la ficha clínica en el ensayo end-to-end, con acuse de recibo</div>
+    </div>
+
+    <div class="campos">
+      <div class="campo"></div><div class="campo"></div><div class="campo"></div><div class="campo"></div>
+      <div class="campo"></div><div class="campo"></div><div class="campo"></div><div class="campo"></div>
+      <div class="campo"></div><div class="campo"></div><div class="campo"></div><div class="campo"></div>
+      <div class="campo"></div><div class="campo"></div><div class="campo"></div><div class="campo"></div>
+      <div class="campo esc"></div>
+    </div>
+    <div class="campos-ley">
+      <span>16 campos cargados de forma autónoma</span>
+      <span style="text-align:right">1 derivado a revisión humana por el umbral conservador — el sistema prefiere preguntar antes que errar</span>
+    </div>
+
+    <div class="res-grid">
+      <div class="res-box"><div class="num">0</div><div class="lbl">escrituras erradas en todos los ensayos realizados</div></div>
+      <div class="res-box"><div class="num">1.00</div><div class="lbl">confianza en el RUT del paciente, con validación matemática (módulo 11)</div></div>
+      <div class="res-box"><div class="num">100&nbsp;%</div><div class="lbl">de las cargas verificadas: cada campo se relee después de escrito</div></div>
+      <div class="res-box"><div class="num">24/7</div><div class="lbl">demo pública operativa, con la consola del agente en vivo</div></div>
+    </div>
+
+    <div class="aprend">
+      <h3>El sistema aprende usándose — caso real</h3>
+      <div class="antes-despues">
+        <div class="ad a"><div class="v">0.53</div><div class="t">confianza inicial · campo Talla escalado</div></div>
+        <div class="fl">→</div>
+        <div class="ad d"><div class="v">1.00</div><div class="t">tras una sola confirmación humana</div></div>
+      </div>
+      <p>El campo «Talla» quedaba bajo el umbral de seguridad y se derivaba a revisión. Bastó que la operadora lo confirmara una vez: el mapeo entró al diccionario aprendido y desde entonces se carga de forma autónoma y determinista.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Conclusiones -->
+<section class="conclusiones">
+  <div class="wrap">
+    <div class="sec-kicker">Conclusiones</div>
+    <div class="sec-title">Lo que este proyecto demuestra</div>
+    <ol>
+      <li><p><b>La arquitectura agentic funciona donde un script no puede:</b> percibir, razonar y actuar sobre un formulario clínico real permitió cargar el 94&nbsp;% del EMPA sin intervención, con cero escrituras erradas.</p></li>
+      <li><p><b>La inteligencia propia es viable y suficiente:</b> un codificador semántico local más reglas calibradas resolvieron el problema sin enviar un solo dato clínico a servicios externos.</p></li>
+      <li><p><b>El humano en el circuito hace al sistema seguro y entrenable a la vez:</b> escalar la duda en vez de adivinar protege al paciente, y cada confirmación mejora la política de carga.</p></li>
+      <li><p><b>El sistema está listo para el siguiente paso:</b> operar sobre RAYEN real solo requiere adaptar el navegador — los contratos, la inteligencia y el flujo de revisión ya están construidos y probados.</p></li>
+    </ol>
+  </div>
+</section>
+
+<!-- Cierre -->
+<section class="cierre">
+  <div class="wrap">
+    <div class="statement">Cada hora que una enfermera no pasa digitando es una hora que vuelve a la atención de pacientes. empa&#8209;bot existe para devolver esas horas.</div>
+    <a class="demo" href="https://empabot.threnody.me">Demo en vivo — empabot.threnody.me</a>
+  </div>
+</section>
+
+<footer>
+  Benjamín López · Sistemas Inteligentes 2026-1 · Ingeniería Civil en Computación e Informática<br>
+  Universidad Central de Chile, Facultad de Ingeniería y Arquitectura — Región de Coquimbo<br>
+  empa-bot es parte del sistema EMPA Vision (Fondo Cataliza UCEN 2026)
+</footer>
+
+</body>
+</html>
